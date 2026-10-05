@@ -21,7 +21,11 @@ const alerts = await fetchOpenAlerts({
   token: config.githubToken,
   fetch,
 });
-const tracker = await createLinearTracker({ apiKey: config.linearApiKey, teamKey: "SEC", fetch });
+const tracker = await createLinearTracker({
+  apiKey: config.linearApiKey,
+  teamKey: config.linearTeamKey,
+  fetch,
+});
 const created = await syncAlerts({ alerts, tracker, dryRun });
 
 const verb = dryRun ? "Would create" : "Created";

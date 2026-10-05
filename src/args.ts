@@ -2,9 +2,10 @@ import { parseArgs } from "node:util";
 
 export const usage = `Usage: depdrop [options]
 
-Creates a Linear SEC ticket for every open Dependabot alert in the GitHub org
-configured in ~/.config/depdrop/config.json. Alerts that already have a ticket
-are skipped.
+Creates a ticket on the configured Linear team for every open Dependabot alert
+in the configured GitHub org. Alerts that already have a ticket are skipped.
+
+Config is read from ~/.config/depdrop/config.json.
 
 Options:
   --dry-run   Show which tickets would be created without creating them
