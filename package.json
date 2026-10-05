@@ -1,0 +1,24 @@
+{
+  "name": "depdrop",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "depdrop": "./src/cli.ts"
+  },
+  "scripts": {
+    "start": "node src/cli.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "format": "oxfmt --write"
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.2",
+    "oxfmt": "^0.70.0",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.1"
+  }
+}
