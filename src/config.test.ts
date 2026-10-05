@@ -17,7 +17,12 @@ describe("loadConfig", () => {
     beforeEach(async () => {
       await writeFile(
         path,
-        JSON.stringify({ githubOrg: "acme", githubToken: "gh-token", linearApiKey: "lin-key" }),
+        JSON.stringify({
+          githubOrg: "acme",
+          githubToken: "gh-token",
+          linearApiKey: "lin-key",
+          linearTeamKey: "SEC",
+        }),
       );
       config = await loadConfig(path);
     });
@@ -27,6 +32,7 @@ describe("loadConfig", () => {
         githubOrg: "acme",
         githubToken: "gh-token",
         linearApiKey: "lin-key",
+        linearTeamKey: "SEC",
       });
     });
   });

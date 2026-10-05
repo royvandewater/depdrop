@@ -5,6 +5,7 @@ const ConfigSchema = z.object({
   githubOrg: z.string(),
   githubToken: z.string(),
   linearApiKey: z.string(),
+  linearTeamKey: z.string(),
 });
 
 export type Config = z.infer<typeof ConfigSchema>;
