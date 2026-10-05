@@ -72,4 +72,23 @@ describe("fetchOpenAlerts", () => {
       expect(alerts).toEqual([expectedAlert(1)]);
     });
   });
+
+  describe("when the org has multiple pages of alerts", () => {
+    let alerts: Alert[];
+
+    beforeEach(async () => {
+      alerts = await fetchOpenAlerts({
+        org: "acme",
+        token: "secret-token",
+        fetch: fakeGitHub({
+          [firstPage]: { body: [rawAlert(1)], next: secondPage },
+          [secondPage]: { body: [rawAlert(2)] },
+        }),
+      });
+    });
+
+    it("returns the alerts from every page", () => {
+      expect(alerts).toEqual([expectedAlert(1), expectedAlert(2)]);
+    });
+  });
 });

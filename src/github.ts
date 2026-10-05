@@ -46,20 +46,30 @@ export const fetchOpenAlerts = async ({
   token: string;
   fetch: typeof globalThis.fetch;
 }): Promise<Alert[]> => {
-  const url = `https://api.github.com/orgs/${org}/dependabot/alerts?state=open&per_page=100`;
-  const response = await fetch(url, {
-    headers: {
-      authorization: `Bearer ${token}`,
-      accept: "application/vnd.github+json",
-      "x-github-api-version": "2022-11-28",
-    },
-  });
-  assert(
-    response.ok,
-    new Error(`GitHub request failed: ${response.status} ${response.statusText}`),
-  );
-  return z
-    .array(AlertSchema)
-    .parse(await response.json())
-    .map(toAlert);
+  const alerts: Alert[] = [];
+  let url: string | undefined =
+    `https://api.github.com/orgs/${org}/dependabot/alerts?state=open&per_page=100`;
+  while (url) {
+    const response: Response = await fetch(url, {
+      headers: {
+        authorization: `Bearer ${token}`,
+        accept: "application/vnd.github+json",
+        "x-github-api-version": "2022-11-28",
+      },
+    });
+    assert(
+      response.ok,
+      new Error(`GitHub request failed: ${response.status} ${response.statusText}`),
+    );
+    alerts.push(
+      ...z
+        .array(AlertSchema)
+        .parse(await response.json())
+        .map(toAlert),
+    );
+    url = nextPageUrl(response.headers.get("link"));
+  }
+  return alerts;
 };
+
+const nextPageUrl = (link: string | null) => link?.match(/<([^>]+)>;\s*rel="next"/)?.[1];
