@@ -4,10 +4,22 @@ Creates a ticket on the Linear "Security & Governance" (SEC) team for every open
 
 ## Usage
 
-```sh
-pnpm install --config.minimumReleaseAgeStrict=true
-GITHUB_ORG=acme GITHUB_TOKEN=... LINEAR_API_KEY=... pnpm start
+Create `~/.config/depdrop/config.json`:
+
+```json
+{
+  "githubOrg": "acme",
+  "githubToken": "...",
+  "linearApiKey": "..."
+}
 ```
 
-- `GITHUB_TOKEN`: needs `security_events` / "Dependabot alerts: read" on the org.
-- `LINEAR_API_KEY`: Linear personal API key with access to the SEC team.
+- `githubToken`: needs `security_events` / "Dependabot alerts: read" on the org.
+- `linearApiKey`: Linear personal API key with access to the SEC team.
+
+Then run:
+
+```sh
+pnpm install --config.minimumReleaseAgeStrict=true
+pnpm start
+```
