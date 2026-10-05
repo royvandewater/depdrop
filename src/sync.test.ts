@@ -19,6 +19,16 @@ const alert = (number: number): Alert => ({
 class FakeTracker implements Tracker {
   created: Alert[] = [];
 
+  existingUrls: string[];
+
+  constructor(existingUrls: string[] = []) {
+    this.existingUrls = existingUrls;
+  }
+
+  async hasTicketFor(alert: Alert) {
+    return this.existingUrls.includes(alert.url);
+  }
+
   async createTicket(alert: Alert) {
     this.created.push(alert);
   }
@@ -35,6 +45,19 @@ describe("syncAlerts", () => {
 
     it("creates a ticket for the alert", () => {
       expect(tracker.created).toEqual([alert(1)]);
+    });
+  });
+
+  describe("when a ticket already exists for one of the alerts", () => {
+    let tracker: FakeTracker;
+
+    beforeEach(async () => {
+      tracker = new FakeTracker([alert(1).url]);
+      await syncAlerts({ alerts: [alert(1), alert(2)], tracker });
+    });
+
+    it("creates a ticket only for the new alert", () => {
+      expect(tracker.created).toEqual([alert(2)]);
     });
   });
 });
