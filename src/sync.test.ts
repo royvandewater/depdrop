@@ -50,14 +50,19 @@ describe("syncAlerts", () => {
 
   describe("when a ticket already exists for one of the alerts", () => {
     let tracker: FakeTracker;
+    let created: Alert[];
 
     beforeEach(async () => {
       tracker = new FakeTracker([alert(1).url]);
-      await syncAlerts({ alerts: [alert(1), alert(2)], tracker });
+      created = await syncAlerts({ alerts: [alert(1), alert(2)], tracker });
     });
 
     it("creates a ticket only for the new alert", () => {
       expect(tracker.created).toEqual([alert(2)]);
+    });
+
+    it("returns the alerts it created tickets for", () => {
+      expect(created).toEqual([alert(2)]);
     });
   });
 });
