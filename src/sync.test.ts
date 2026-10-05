@@ -40,7 +40,7 @@ describe("syncAlerts", () => {
 
     beforeEach(async () => {
       tracker = new FakeTracker();
-      await syncAlerts({ alerts: [alert(1)], tracker });
+      await syncAlerts({ alerts: [alert(1)], tracker, dryRun: false });
     });
 
     it("creates a ticket for the alert", () => {
@@ -54,7 +54,7 @@ describe("syncAlerts", () => {
 
     beforeEach(async () => {
       tracker = new FakeTracker([alert(1).url]);
-      created = await syncAlerts({ alerts: [alert(1), alert(2)], tracker });
+      created = await syncAlerts({ alerts: [alert(1), alert(2)], tracker, dryRun: false });
     });
 
     it("creates a ticket only for the new alert", () => {
@@ -62,6 +62,24 @@ describe("syncAlerts", () => {
     });
 
     it("returns the alerts it created tickets for", () => {
+      expect(created).toEqual([alert(2)]);
+    });
+  });
+
+  describe("when dry running", () => {
+    let tracker: FakeTracker;
+    let created: Alert[];
+
+    beforeEach(async () => {
+      tracker = new FakeTracker([alert(1).url]);
+      created = await syncAlerts({ alerts: [alert(1), alert(2)], tracker, dryRun: true });
+    });
+
+    it("does not create any tickets", () => {
+      expect(tracker.created).toEqual([]);
+    });
+
+    it("returns the alerts it would create tickets for", () => {
       expect(created).toEqual([alert(2)]);
     });
   });

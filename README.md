@@ -23,3 +23,9 @@ Then run:
 pnpm install --config.minimumReleaseAgeStrict=true
 pnpm start
 ```
+
+Preview without creating tickets:
+
+```sh
+pnpm start --dry-run
+```

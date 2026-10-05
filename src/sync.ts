@@ -18,11 +18,19 @@ export interface Tracker {
   createTicket(alert: Alert): Promise<void>;
 }
 
-export const syncAlerts = async ({ alerts, tracker }: { alerts: Alert[]; tracker: Tracker }) => {
+export const syncAlerts = async ({
+  alerts,
+  tracker,
+  dryRun,
+}: {
+  alerts: Alert[];
+  tracker: Tracker;
+  dryRun: boolean;
+}) => {
   const created: Alert[] = [];
   for (const alert of alerts) {
     if (await tracker.hasTicketFor(alert)) continue;
-    await tracker.createTicket(alert);
+    if (!dryRun) await tracker.createTicket(alert);
     created.push(alert);
   }
   return created;
